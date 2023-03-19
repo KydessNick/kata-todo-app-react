@@ -88,10 +88,10 @@ import PropTypes from 'prop-types';
 
 // export default TodoList
 
-function TodoList({ tasks, renderMode, onDeleteTask, onCompleteTask, onEditTask }) {
+function TodoList({ tasks, renderMode, onDeleteTask, onCompleteTask, onEditTask, onPlay, onPause }) {
   const items = tasks.reduce((acc, task) => {
     let classList = '';
-    const { description, created, id, editing, completed } = task;
+    const { description, created, id, editing, completed, timeInSec } = task;
     let willRender = true;
     if (task.completed) {
       classList += ' completed';
@@ -123,10 +123,14 @@ function TodoList({ tasks, renderMode, onDeleteTask, onCompleteTask, onEditTask 
             onDeleteTask={onDeleteTask}
             onCompleteTask={onCompleteTask}
             onEditTask={onEditTask}
+            onPlay={onPlay}
+            onPause={onPause}
+            timeInSec={timeInSec}
           />
         </li>
       );
     }
+    console.log(timeInSec); // суммарное количество времени undefind
 
     return acc;
   }, []);

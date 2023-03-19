@@ -59,7 +59,7 @@
     "indent": ["error", 2, { "CallExpression": { "arguments": 1 }, "SwitchCase": 1 }],
     "no-plusplus": "off",
     "no-param-reassign": 0,
-    "prettier/prettier": "error",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "linebreak-style": [0, "unix"],
     "quotes": ["error", "single"],
     "import/no-unresolved": [2, { "caseSensitive": false }],
