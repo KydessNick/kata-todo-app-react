@@ -150,20 +150,62 @@ import './app.css';
 // }
 
 export default class App extends Component {
-  static toggleProperty(arr, id, propName) {
+  static toggleProperty = (arr, id, propName, value = !arr[arr.findIndex((item) => item.id === id)][propName]) => {
     const i = arr.findIndex((el) => el.id === id);
     const oldItem = arr[i];
-    const newItem = { ...oldItem, [propName]: !oldItem[propName] };
+    const newItem = { ...oldItem, [propName]: value };
+    // const newItem = { ...oldItem, [propName]: !oldItem[propName] };
     return [...arr.slice(0, i), newItem, ...arr.slice(i + 1)];
-  }
+  };
 
   idCounter = 0;
 
   state = {
-    tasks: [this.createTask('create app'), this.createTask('make editing')],
+    tasks: [this.createTask('create app', '61'), this.createTask('make editing', 65)],
     renderMode: 'All',
     renderOptions: ['All', 'Active', 'Completed'],
-    newTaskFormText: '',
+    // description: '',
+    // minutes: '',
+    // seconds: '',
+  };
+
+  componentDidMount() {
+    this.updateTime();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  timeGet = (minutes, seconds) => +minutes * 60 + +seconds;
+
+  playBtn = (id) => {
+    this.setState(({ tasks }) => ({ tasks: App.toggleProperty(tasks, id, 'isTimerOn', true) }));
+  };
+
+  pauseBtn = (id) => {
+    this.setState(({ tasks }) => ({ tasks: App.toggleProperty(tasks, id, 'isTimerOn', false) }));
+  };
+
+  updateTime = () => {
+    this.interval = setInterval(() => {
+      this.setState(({ tasks }) => {
+        const newArr = tasks.map((task) => {
+          if (task.timeInSec === 0 || task.done) {
+            return task;
+          }
+          if (task.isTimerOn) {
+            // eslint-disable-next-line no-param-reassign
+            task.timeInSec -= 1;
+          }
+          return task;
+        });
+        return {
+          task: newArr,
+        };
+      });
+    }, 1000);
   };
 
   deleteTask = (id) => {
@@ -194,11 +236,15 @@ export default class App extends Component {
     }));
   };
 
-  addTask = (description) => {
-    const newItem = this.createTask(description);
+  addTask = (description, minutes, seconds) => {
+    const timeInSec = this.timeGet(minutes, seconds);
+    console.log(typeof timeInSec);
+    const newItem = this.createTask(description, timeInSec);
     this.setState(({ tasks }) => ({
       tasks: [...tasks, newItem],
-      newTaskFormText: '',
+      description: '',
+      minutes: '',
+      seconds: '',
     }));
   };
 
@@ -216,23 +262,38 @@ export default class App extends Component {
   };
 
   newTaskChangeHandler = (e) => {
+    const { target } = e;
+    const { name, value } = target;
+    console.log(name, value);
     this.setState({
-      newTaskFormText: e.target.value,
+      [name]: value,
     });
   };
+  // newTaskChangeHandler = (e) => {
+  //   console.log(e.target.name);
+  //   console.log(e);
+  //   const a = e.target.name;
+  //   console.log(Array.isArray(a));
+  //   this.setState({
+  //     newTaskFormText: e.target.value,
+  //   });
+  // };
 
-  createTask(description) {
+  createTask(description, timeInSec) {
+    console.log(timeInSec); // суммарное количество времени Number
     return {
       description,
       created: new Date(),
       id: this.idCounter++,
       completed: false,
       editing: false,
+      timeInSec,
+      isTimerOn: false,
     };
   }
 
   render() {
-    const { tasks, newTaskFormText, renderMode, renderOptions } = this.state;
+    const { tasks, renderMode, renderOptions, description, minutes, seconds } = this.state;
     const itemsLeft = tasks.reduce((acc, task) => {
       if (!task.completed) acc++;
       return acc;
@@ -242,9 +303,12 @@ export default class App extends Component {
         <header className="header">
           <h1>todos</h1>
           <NewTaskForm
-            value={newTaskFormText}
+            // value={newTaskFormText}
             newTaskChangeHandler={this.newTaskChangeHandler}
             onItemAdded={this.addTask}
+            description={description}
+            minutes={minutes}
+            seconds={seconds}
           />
         </header>
 
@@ -255,6 +319,9 @@ export default class App extends Component {
             onCompleteTask={this.completeTask}
             onDeleteTask={this.deleteTask}
             onEditTask={this.editTask}
+            onPlay={this.playBtn}
+            onPause={this.pauseBtn}
+            // timeInSec={this.timeGet}
           />
           <Footer
             itemsLeft={itemsLeft}

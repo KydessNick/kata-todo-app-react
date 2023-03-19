@@ -44,32 +44,60 @@ import PropTypes from 'prop-types';
 
 export default class NewTaskForm extends Component {
   onEnterPress = (e) => {
-    const { onItemAdded, value } = this.props;
+    const { onItemAdded, description, minutes, seconds } = this.props;
     if (e.keyCode === 13) {
-      onItemAdded(value);
+      console.log(typeof minutes);
+      e.preventDefault();
+      onItemAdded(description, minutes, seconds);
     }
   };
 
   render() {
-    const { value, newTaskChangeHandler } = this.props;
+    const { newTaskChangeHandler, minutes, seconds, description } = this.props;
     return (
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        value={value}
-        onChange={newTaskChangeHandler}
-        onKeyDown={this.onEnterPress}
-      />
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+      <form className="new-todo-form" onKeyDown={this.onEnterPress}>
+        <button type="submit" aria-label="submission" />
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          value={description}
+          name="description"
+          onChange={newTaskChangeHandler}
+          minLength={1}
+          required
+        />
+        <input
+          type="text"
+          className="new-todo-form__timer"
+          value={minutes}
+          name="minutes"
+          placeholder="Min"
+          onChange={newTaskChangeHandler}
+          pattern="[0-9]*"
+          required
+        />
+        <input
+          type="text"
+          className="new-todo-form__timer"
+          value={seconds}
+          name="seconds"
+          placeholder="Sec"
+          onChange={newTaskChangeHandler}
+          pattern="[0-6]{1}[0-9]*"
+          required
+        />
+      </form>
     );
   }
 }
 
 NewTaskForm.propTypes = {
-  value: PropTypes.string,
+  // value: PropTypes.string,
   newTaskChangeHandler: PropTypes.func.isRequired,
   onItemAdded: PropTypes.func.isRequired,
 };
 
 NewTaskForm.defaultProps = {
-  value: '',
+  // value: '',
 };

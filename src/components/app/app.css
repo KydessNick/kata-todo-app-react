@@ -144,7 +144,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.new-todo-form {
+  display: flex;
+  margin-bottom: 0;
+}
+
 .new-todo,
+.new-todo-form .new-todo-form__timer,
 .edit {
   position: relative;
   margin: 0;
@@ -162,11 +168,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.new-todo {
+.new-todo,
+.new-todo-form .new-todo-form__timer {
   padding: 16px 16px 16px 60px;
   border: none;
   background: rgba(0, 0, 0, 0.003);
   box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
+}
+
+.new-todo {
+  width: 70%;
+}
+
+.new-todo-form .new-todo-form__timer {
+  width: 15%;
+  padding-left: 16px;
 }
 
 .main {
@@ -300,6 +316,12 @@ body {
 
 label {
   margin-bottom: 0;
+  cursor: default;
+}
+
+.todo-list li .wrapper .description {
+  font-size: 13px;
+  color: gray;
 }
 
 .todo-list li .icon {
@@ -308,11 +330,17 @@ label {
   bottom: -3px;
   width: 30px;
   height: 40px;
-  font-size: 34px;
   color: #cc9a9a;
-  margin: auto 0 11px;
+  margin: auto 0;
   transition: color 0.2s ease-out;
   cursor: pointer;
+}
+
+.todo-list li .icon-pause,
+.todo-list li .icon-play {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .todo-list li .icon:hover {
@@ -321,6 +349,7 @@ label {
 
 .todo-list li .icon-destroy {
   right: 10px;
+  font-size: 34px;
 }
 
 .todo-list li .icon-destroy:after {
@@ -342,6 +371,51 @@ label {
 
 .todo-list li.editing:last-child {
   margin-bottom: -1px;
+}
+
+/* .todo-list li .icon {
+  width: 30px;
+  height: 40px;
+  color: #cc9a9a;
+  margin: auto 0;
+  transition: color 0.2s ease-out;
+  cursor: pointer;
+} */
+
+.todo-list li .icon-pause,
+.todo-list li .icon-play {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.todo-list li .icon-play {
+  font-size: 16px;
+  transform: translate(-15px, 0px);
+}
+
+.todo-list li .icon-pause {
+  font-size: 17px;
+  /* transform: translate(3px, -3px); */
+}
+
+.timer-container {
+  display: flex;
+  align-items: center;
+}
+
+.timer {
+  transform: translate(30px, 3px);
+  color: gray;
+  font-size: 13px;
+}
+
+.icon-pause:after {
+  content: '⏸';
+}
+
+.icon-play:after {
+  content: '▶';
 }
 
 .footer {
