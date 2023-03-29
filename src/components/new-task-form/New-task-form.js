@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import './New-task-form.css';
 
+// import PropTypes, { func } from 'prop-types';
 import PropTypes from 'prop-types';
 
 // export default class NewTaskForm extends Component{
@@ -46,25 +47,26 @@ export default class NewTaskForm extends Component {
   onEnterPress = (e) => {
     const { onItemAdded, description, minutes, seconds } = this.props;
     if (e.keyCode === 13) {
-      console.log(typeof minutes);
       e.preventDefault();
       onItemAdded(description, minutes, seconds);
     }
+    return alert('fill the input with text!');
   };
 
   render() {
     const { newTaskChangeHandler, minutes, seconds, description } = this.props;
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-      <form className="new-todo-form" onKeyDown={this.onEnterPress}>
-        <button type="submit" aria-label="submission" />
+      <form className="new-todo-form" onSubmit={this.onEnterPress}>
         <input
+          type="text"
           className="new-todo"
           placeholder="What needs to be done?"
           value={description}
           name="description"
           onChange={newTaskChangeHandler}
-          minLength={1}
+          minLength="1"
+          maxLength="20"
           required
         />
         <input
@@ -75,6 +77,7 @@ export default class NewTaskForm extends Component {
           placeholder="Min"
           onChange={newTaskChangeHandler}
           pattern="[0-9]*"
+          minLength="1"
           required
         />
         <input
@@ -85,8 +88,10 @@ export default class NewTaskForm extends Component {
           placeholder="Sec"
           onChange={newTaskChangeHandler}
           pattern="[0-6]{1}[0-9]*"
+          minLength="1"
           required
         />
+        <button type="submit" aria-label="submission" />
       </form>
     );
   }

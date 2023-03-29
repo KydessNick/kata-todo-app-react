@@ -13,11 +13,15 @@ import PropTypes from 'prop-types';
 //     }
 // }
 
-function Footer({ itemsLeft, onRenderModeChange, renderMode, renderOptions, onDeleteAllComplete }) {
+function Footer({ itemsLeft, onRenderModeChange, renderMode, currentTaskFilter, onDeleteAllComplete }) {
   return (
     <footer className="footer">
       <span className="todo-count">{itemsLeft} items left</span>
-      <TaskFilter onRenderModeChange={onRenderModeChange} renderMode={renderMode} renderOptions={renderOptions} />
+      <TaskFilter
+        onRenderModeChange={onRenderModeChange}
+        renderMode={renderMode}
+        currentTaskFilter={currentTaskFilter}
+      />
       <button className="clear-completed" onClick={() => onDeleteAllComplete()} type="button">
         Clear completed
       </button>
@@ -30,12 +34,12 @@ export default Footer;
 Footer.propTypes = {
   itemsLeft: PropTypes.number.isRequired,
   renderMode: PropTypes.oneOf(['All', 'Active', 'Completed']),
-  renderOptions: PropTypes.arrayOf(PropTypes.string),
+  currentTaskFilter: PropTypes.arrayOf(PropTypes.string),
   onRenderModeChange: PropTypes.func.isRequired,
   onDeleteAllComplete: PropTypes.func.isRequired,
 };
 
 Footer.defaultProps = {
   renderMode: 'All',
-  renderOptions: ['All', 'Active', 'Completed'],
+  currentTaskFilter: ['All', 'Active', 'Completed'],
 };

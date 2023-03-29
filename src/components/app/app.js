@@ -160,10 +160,11 @@ export default class App extends Component {
 
   idCounter = 0;
 
+  currentTaskFilter = ['All', 'Active', 'Completed'];
+
   state = {
     tasks: [this.createTask('create app', '61'), this.createTask('make editing', 65)],
     renderMode: 'All',
-    renderOptions: ['All', 'Active', 'Completed'],
     // description: '',
     // minutes: '',
     // seconds: '',
@@ -293,7 +294,8 @@ export default class App extends Component {
   }
 
   render() {
-    const { tasks, renderMode, renderOptions, description, minutes, seconds } = this.state;
+    // const { tasks, renderMode, renderOptions(currentTaskFilter), description, minutes, seconds } = this.state;
+    const { tasks, renderMode, description, minutes, seconds } = this.state;
     const itemsLeft = tasks.reduce((acc, task) => {
       if (!task.completed) acc++;
       return acc;
@@ -328,7 +330,7 @@ export default class App extends Component {
             onRenderModeChange={this.setRenderMode}
             onDeleteAllComplete={this.deleteAllComplete}
             renderMode={renderMode}
-            renderOptions={renderOptions}
+            currentTaskFilter={this.currentTaskFilter}
           />
         </section>
       </section>
